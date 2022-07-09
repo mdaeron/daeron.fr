@@ -1,0 +1,136 @@
+body {
+	font-family: 'Roboto', sans-serif;
+	font-size: 12pt;
+}
+
+.biblio {
+/* 	color: red; */
+	}
+
+.archives {
+/* 	color: #999; */
+	}
+
+.about {
+/* 	color: green; */
+	}
+
+.markdown-body h1 {
+	margin-bottom: 3ex;
+}
+
+.biblio ul {
+	font-size:90%;
+}
+
+.biblio li {
+	list-style-type: none;
+	text-indent: -2.85em;
+	padding-left: 2em;
+}
+
+.biblio li {
+	line-height: 140%;
+	margin-bottom: 2ex;
+}
+
+.markdown-body {
+	position: absolute;
+	margin: 2ex 6em 10ex 16em;
+	padding-left: 1em;
+	padding-bottom: 8ex;
+	border-left: 1px solid gainsboro;
+	min-height: 85%;
+	max-width: 42em;
+}
+
+.footer {
+	position: absolute ;
+	bottom: -2em ;
+	padding-bottom: 5% ;
+	color: silver ;
+	font-size: 75% ;
+}
+
+.page {
+	position: absolute;
+	margin: 2ex 6em 10ex 16em;
+	padding-left: 1em;
+	padding-bottom: 8ex;
+	border-left: 1px solid gainsboro;
+	min-height: 85%;
+	max-width: 42em;
+}
+
+.markdown-body p {
+	margin-top: 3ex;
+	line-height: 150%;
+}
+
+.markdown-body a:link,
+.markdown-body a:visited {
+  color: crimson;
+  text-decoration: none;
+}
+
+.markdown-body a:hover,
+.markdown-body a:active {
+  text-decoration: underline;
+}
+
+sup {
+    font-size: 75%;
+    line-height: 0.01ex;
+}
+
+sub {
+    font-size: 75%;
+    line-height: 0.01ex;
+}
+
+.sidebar {
+	position: fixed;
+	top: 3ex;
+	left: 2em;
+	width: 12em;
+//	color: deepskyblue;
+	color: crimson;
+	text-align: right;
+	text-transform: uppercase;
+	line-height: 140%;
+}
+
+.sig {
+	position: fixed;
+	bottom: 5ex;
+	left: 2em;
+	width: 12em;
+//	color: deepskyblue;
+	color: crimson;
+	text-align: right;
+}
+
+a:visited,
+a:link {
+	color: crimson;
+	text-decoration: none;
+}
+
+a:hover,
+a:active {
+	color: black;
+}
+
+.landing h1 {
+	color: #000;
+	margin-top: 10ex;
+	margin-bottom:4ex;
+}
+
+.landing {
+	color: #888;
+}
+
+.douglassadams {
+	color: #888;
+}
