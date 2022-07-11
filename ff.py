@@ -4,7 +4,10 @@ from flask import Flask, render_template, Blueprint
 from flaskext.markdown import Markdown
 import os, datetime
 
-my_blueprint = Blueprint('my_blueprint', __name__, template_folder='templates', url_prefix='/daeron.fr')
+my_blueprint = Blueprint('my_blueprint', __name__, template_folder='templates',
+	url_prefix='/daeron.fr',
+# 	url_prefix='',
+	)
 
 app = Flask(__name__)
 

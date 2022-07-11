@@ -3,29 +3,40 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<link rel="stylesheet" href=/static/main.css>
-		<link rel="stylesheet" href=/daeron.fr/static/main.css>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href=/static/style.css>
+		<link rel="stylesheet" href=/daeron.fr/static/style.css>
 		<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 		<title>daeron.fr</title>
 	</head>
 
 	<body>
 
-		<div class="sidebar">
-			<p><a href=/daeron.fr/about/>About</a>
-			<br><a href=/daeron.fr/biblio/>Publications</a>
-			<br><a href="https://github.com/mdaeron/D47crunch">D47crunch</a>
-			<br><a href="http://clumpycrunch.pythonanywhere.com">ClumpyCrunch</a>
-		</div>
+		<!-- Navigation bar -->
+		<header class="header">
+			<!-- Logo -->
+			<a href="mailto:daeron@lsce.ipsl.fr" class="logo">daeron@lsce.ipsl.fr</a>
 
-		<div class="sig">
-			<p>Mathieu Daëron
-			<br><a href="mailto:daeron@lsce.ipsl.fr">daeron@lsce.ipsl.fr</a>
-			<br><a href="http://en.wikipedia.org/wiki/CNRS">CNRS</a> / <a href="https://www.lsce.ipsl.fr/en/">LSCE</a></p>
-		</div>
+			<!-- Hamburger icon -->
+			<input class="side-menu" type="checkbox" id="side-menu"/>
+			<label class="hamb" for="side-menu"><span class="hamb-line"></span></label>
 
-		<div class="markdown-body"><div class="biblio">
-			<h1>Publications</h1>
+			<!-- Menu -->
+			<nav class="nav">
+				<ul class="menu">
+					<li><a href=/daeron.fr/about/>About</a></li>
+					<li><a href=/daeron.fr/biblio/>Publications</a></li>
+					<li><a href="https://github.com/mdaeron/D47crunch">D47crunch</a></li>
+					<li><a href="http://clumpycrunch.pythonanywhere.com">ClumpyCrunch</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<!-- Main content -->
+		<main>
+			<article class=biblio>
+				<h1>Publications</h1>
 <!--## In preparation-->
 
 <!--## Under review-->
@@ -36,7 +47,7 @@
 <ul>
 <li>M. Casado, T. Stoltmann, A. Landais, N. Jobert, M. Daëron, F. Prié, S. Kassi (2022). High stability in near-infrared spectroscopy: adapting clock techniques to optical feedback. <em>Applied Physics B</em>  <a href="https://doi.org/10.1007/s00340-022-07774-2">10.1007/s00340-022-07774-2</a></li>
 <li><a href="Moulin-2022.pdf">(PDF)</a> A. Moulin, L. Benedetti, L. Vidal, J. Hage-Hassan, A. Elias, J. Van der Woerd, I. Schimmelpfennig, M. Daëron, P. Tapponnier (2022). LGM glaciers in the SE Mediterranean? First evidence from glacial landforms and <sup>36</sup>Cl dating on Mount Lebanon. <em>Quaternary Science Reviews</em> <a href="https://doi.org/10.1016/j.quascirev.2022.107502">10.1016/j.quascirev.2022.107502</a></li>
-<li><a href="Letulle-2022.pdf">(PDF)</a>T. Letulle, G. Suan, M. Daëron, M. Rogov, C. Ullmann, C. Lécuyer, A. Vinçon-Laugier, B. Reynard, G. Montagnac (2022). Clumped isotope evidence for Early Jurassic extreme polar warmth and high climate sensitivity. <em>Climate of the Past</em> <a href="https://doi.org/10.5194/cp-18-435-2022">10.5194/cp-18-435-2022</a></li>
+<li><a href="Letulle-2022.pdf">(PDF)</a> T. Letulle, G. Suan, M. Daëron, M. Rogov, C. Ullmann, C. Lécuyer, A. Vinçon-Laugier, B. Reynard, G. Montagnac (2022). Clumped isotope evidence for Early Jurassic extreme polar warmth and high climate sensitivity. <em>Climate of the Past</em> <a href="https://doi.org/10.5194/cp-18-435-2022">10.5194/cp-18-435-2022</a></li>
 <li><a href="Huyghe-2022.pdf">(PDF)</a> D. Huyghe, M. Daëron, M. de Rafelis, D. Blamart, M. Sébilo, Y.-M. Paulet, F. Lartaud (2022). Clumped isotopes in marine calcitic bivalves. <em>Geochimica et Cosmochimica Acta</em> <a href="https://doi.org/10.1016/j.gca.2021.09.019">10.1016/j.gca.2021.09.019</a></li>
 <li><a href="Fiebig-2021.pdf">(PDF)</a> J. Fiebig, M. Daëron, M. Bernecker, W. Guo, G. Schneider, R. Boch, S. Bernasconi, J. Jautzy, M. Dietzel (2021). Calibration of the dual clumped isotope thermometer for carbonates. <em>Geochimica et Cosmochimica Acta</em>. <a href="https://doi.org/10.1016/j.gca.2021.07.012">10.1016/j.gca.2021.07.012</a></li>
 <li><a href="Dae%CC%88ron-2021.pdf">(PDF)</a> M. Daëron (2021). Full propagation of analytical uncertainties in Δ<sub>47</sub> measurements. <em>Geochemistry, Geophysics, Geosystems</em>. <a href="https://doi.org/10.1029/2020GC009592">10.1029/2020GC009592</a></li>
@@ -70,9 +81,9 @@
 <li><a href="Dae%CC%88ron-2005.pdf">(PDF)</a> M. Daëron, Y. Klinger, P. Tapponnier, A. Elias, E. Jacques, &amp; A. Sursock (2005). Sources of the large A.D. 1202 and 1759 Near East earthquakes. <em>Geology</em>. <a href="https://doi.org/10.1130/G21352.1">10.1130/G21352.1</a></li>
 <li><a href="Dae%CC%88ron-2004.pdf">(PDF)</a> M. Daëron, L. Benedetti, P. Tapponnier, A. Sursock, &amp; R. Finkel (2004). Constraints on the post ~25-ka slip rate of the Yammoûneh fault (Lebanon) using in situ cosmogenic <sup>36</sup>Cl dating of offset limestone-clast fans. <em>Earth and Planetary Science Letters</em>. <a href="https://doi.org/10.1016/j.epsl.2004.07.014">10.1016/j.epsl.2004.07.014</a></li>
 </ul>
-			<div class='footer'>Last modified on 10 Jul 2022</p>
-		</div></div>
-
+				<div class='footer'>Last modified on 11 Jul 2022</div>
+			</article>
+		</main>
 	</body>
 
 </html>

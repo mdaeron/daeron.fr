@@ -3,34 +3,45 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<link rel="stylesheet" href=/static/main.css>
-		<link rel="stylesheet" href=/daeron.fr/static/main.css>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href=/static/style.css>
+		<link rel="stylesheet" href=/daeron.fr/static/style.css>
 		<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 		<title>daeron.fr</title>
 	</head>
 
 	<body>
 
-		<div class="sidebar">
-			<p><a href=/daeron.fr/about/>About</a>
-			<br><a href=/daeron.fr/biblio/>Publications</a>
-			<br><a href="https://github.com/mdaeron/D47crunch">D47crunch</a>
-			<br><a href="http://clumpycrunch.pythonanywhere.com">ClumpyCrunch</a>
-		</div>
+		<!-- Navigation bar -->
+		<header class="header">
+			<!-- Logo -->
+			<a href="mailto:daeron@lsce.ipsl.fr" class="logo">daeron@lsce.ipsl.fr</a>
 
-		<div class="sig">
-			<p>Mathieu Daëron
-			<br><a href="mailto:daeron@lsce.ipsl.fr">daeron@lsce.ipsl.fr</a>
-			<br><a href="http://en.wikipedia.org/wiki/CNRS">CNRS</a> / <a href="https://www.lsce.ipsl.fr/en/">LSCE</a></p>
-		</div>
+			<!-- Hamburger icon -->
+			<input class="side-menu" type="checkbox" id="side-menu"/>
+			<label class="hamb" for="side-menu"><span class="hamb-line"></span></label>
 
-		<div class="markdown-body"><div class="landing">
-			<h1>daeron.fr</h1>
+			<!-- Menu -->
+			<nav class="nav">
+				<ul class="menu">
+					<li><a href=/daeron.fr/about/>About</a></li>
+					<li><a href=/daeron.fr/biblio/>Publications</a></li>
+					<li><a href="https://github.com/mdaeron/D47crunch">D47crunch</a></li>
+					<li><a href="http://clumpycrunch.pythonanywhere.com">ClumpyCrunch</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<!-- Main content -->
+		<main>
+			<article class=landing>
+				<h1>daeron.fr</h1>
 <p><em>I love deadlines. I like the whooshing sound they make as they fly by.</em></p>
 <p>— Douglas Adams</p>
-			<div class='footer'>Last modified on 09 Jul 2022</p>
-		</div></div>
-
+				<div class='footer'>Last modified on 10 Jul 2022</div>
+			</article>
+		</main>
 	</body>
 
 </html>
