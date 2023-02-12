@@ -10,6 +10,7 @@
 /* 	--hover: #909090; */
 	--hover: #FCEBBD;
 	--shadow: #997C2F;
+	--code: #EEEEEE;
 	--footer: #909090;
 /* 	--logo: #909090; */
 	--logo: #BF9C3B;
@@ -209,23 +210,28 @@ article h2 {
 	margin-top: 15px;
 }
 
+.staticwebsite ol {
+	font-size:100%;
+	margin-left: 25px;
+	margin-right: 25px;
+	margin-top: 15px;
+}
+
 .biblio li {
 	list-style-type: none;
 	text-indent: -25px;
 /* 	padding-left: 2em; */
-	line-height: 140%;
+	line-height: 120%;
 	margin-bottom: 2ex;
 }
 
-.links li {
-	list-style: square;
-	margin-bottom: 1ex;
+.links li, .ramblings li, .staticwebsite li {
+	line-height: 160%;
+	margin-bottom: 1.5ex;
 }
 
-.ramblings li {
+.links li, .ramblings li {
 	list-style: square;
-	margin-top: 2ex;
-	margin-bottom: 2ex;
 }
 
 sup {
@@ -246,9 +252,17 @@ sub {
 	padding-top: 50px ;
 	padding-bottom: 25px ;
 	text-align: center;
-	color: var(--footer);;
+	color: var(--footer);
 	font-size: 75%;
 }
+
+.footer a:link {
+	color: var(--footer);
+}
+
+.index .footer{
+	visibility: hidden;
+	}
 
 @media (min-width: 768px) {
 	article{
@@ -262,7 +276,7 @@ sub {
 article p {
 	margin-top: 3ex;
 	margin-bottom: 3ex;
-	line-height: 150%;
+	line-height: 140%;
 }
 
 article a:visited,
@@ -275,4 +289,24 @@ article a:hover,
 article a:active {
 	text-decoration: underline;
 }
+
+code {
+	font-family: "Roboto Mono", monospace;
+	background: var(--code);
+	padding-left: .5ex;
+	padding-right: .5ex;
+}
+
+pre code {
+	border-top: 1px solid #aaaaaa;
+	border-bottom: 1px solid #aaaaaa;
+	font-size: 80%;
+	display: block;
+	background: var(--code);
+	white-space: pre;
+	-webkit-overflow-scrolling: touch;
+	overflow-x: scroll;
+	max-width: 100%;
+	min-width: 100px;
+	padding: 2ex;
 }
