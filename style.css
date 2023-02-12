@@ -202,7 +202,7 @@ article h2 {
 	margin-bottom: 1.5ex;
 }
 
-.biblio ul, .links ul {
+.biblio ul, .links ul, .ramblings ul {
 	font-size:100%;
 	margin-left: 25px;
 	margin-right: 25px;
@@ -219,9 +219,13 @@ article h2 {
 
 .links li {
 	list-style: square;
-/* 	text-indent: -25px; */
-/* 	line-height: 140%; */
 	margin-bottom: 1ex;
+}
+
+.ramblings li {
+	list-style: square;
+	margin-top: 2ex;
+	margin-bottom: 2ex;
 }
 
 sup {
