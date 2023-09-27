@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="/style.css">
+		<link rel="stylesheet" href="/sas.css">
+		<title>daeron.fr</title>
+	</head>
+
+	<body>
+
+		<!-- Navigation bar -->
+		<header class="header">
+			<!-- Logo -->
+			<a href=/ class="logo">daeron.fr</a>
+
+			<!-- Hamburger icon -->
+			<input class="side-menu" type="checkbox" id="side-menu"/>
+			<label class="hamb" for="side-menu"><span class="hamb-line"></span></label>
+
+			<!-- Menu -->
+			<nav class="nav">
+				<ul class="menu">
+					<li><a href="/about">About</a></li>
+					<li><a href="/biblio">Publications</a></li>
+					<li><a href="/ramblings">Ramblings</a></li>
+					<li><a href="/links">Links</a></li>
+					<li><a href="https://github.com/mdaeron/D47crunch">D47crunch</a></li>
+					<li><a href="https://github.com/mdaeron/D47calib">D47calib</a></li>
+					<li><a href="http://clumpycrunch.pythonanywhere.com">ClumpyCrunch</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<!-- Main content -->
+		<main>
+			<article class=about>
+				<h1>Mathieu Daëron</h1>
+<p>Laboratoire des Sciences du Climat et de l'Environnement <br>
+Bâtiment 714 - Orme des Merisiers <br>
+F-91191 Gif-sur-Yvette, France</p>
+<p><a href="mailto:daeron@lsce.ipsl.fr">daeron@lsce.ipsl.fr</a></p>
+<p>I am a <a href="http://en.wikipedia.org/wiki/CNRS">CNRS</a> research scientist at <a href="https://www.lsce.ipsl.fr/en">LSCE</a>.
+As a stable isotope geochemist, I try to solve Earth science mysteries by studying tiny variations in the concentrations of stable isotopes in different types of natural samples.</p>
+<h4>“Isotopes”?</h4>
+<p>Isotopes are variants of the same chemical element (e.g., carbon) which have very similar chemical properties but slightly different atomic masses (e.g., carbon-12, carbon-13 and carbon-14). Some isotopes are unstable and undergo radioactive decay. For instance, carbon-14 decays into nitrogen-14 with a half-life of 5,700 years, which makes it useful for radiocarbon dating at time scales of a few tens of thousands of years.</p>
+<h4>“Stable” isotopes?</h4>
+<p>Other, non-radioactive (“stable”) isotopes can be used as natural time capsules recording past environmental of geological conditions. Over the past 70+ years, stable isotope geochemistry has provided far-reaching insights into past and current processes shaping planet Earth, its structure, its climate, and its environments.</p>
+<h4>“Clumped” isotopes?</h4>
+<p>Clumped-isotope geochemistry is the study of the distribution of isotopes within and among molecules of the same natural material, for example how stable isotopes of carbon and oxygen are distributed among CO<sub>2</sub> molecules in a given sample. Are they randomly combined according to a “stochastic” distribution, or do <sup>13C</sup>C and <sup>18</sup>O, for instance, tend to “clump” together more frequently than predicted by randomness? This field of geochemistry has rapidly increased in scope since 2004.</p>
+<p>Suggested reading: <a href="https://doi.org/10.1016/j.epsl.2007.08.020">Eiler (2007)</a>; <a href="https:/doi.org/10.1016/j.quascirev.2011.09.001">Eiler (2013)</a>.</p>
+<h4>Explain like I'm five: what about carbonate clumped-isotope thermometry?</h4>
+<p>Here is how clumped isotope thermometry works in carbonates. These minerals are made of metal ions and carbonate groups. Each carbonate group is made of one carbon atom and three oxygen atoms. Most of these carbon atoms are carbon-12 (<sup>12</sup>C), but a few of them are carbon-13 (<sup>13</sup>C). Most of the oxygen atoms are oxygen-16 (<sup>16</sup>O), but a few of them are oxygen-18 (<sup>18</sup>O). As a result, most carbonate groups are made of one <sup>12</sup>C and three <sup>16</sup>O, but a few of them have <sup>13</sup>C instead of <sup>12</sup>C; some others have one <sup>18</sup>O instead of one <sup>16</sup>O; some (very few) others have both one <sup>13</sup>C and one <sup>18</sup>O, and these are called “doubly substituted”. Knowing the abundance of <sup>13</sup>C and <sup>18</sup>O in a given mineral, we can compute the abundance of doubly substituted carbonate groups expected for a completely random distribution of the carbon and oxygen isotopes among carbonate groups.</p>
+<p>For fundamental thermodynamic reasons, carbonate minerals favor “clumping” <sup>13</sup>C and <sup>18</sup>O together, meaning that most natural carbonates have slightly more doubly susbstituted groups than expected for a completely random distribution. This statistical “excess” is small (close to zero, i.e. quasi-random) in minerals formed at high temperatures (e.g., marble), and greater (but still pretty small) in minerals formed at lower temperatures (e.g., foraminifer shells).</p>
+<p>It's technically difficult but still feasible to measure these isotopic abundances with a good enough precision that we can estimate the formation temperature of carbonate minerals with a precision of 1-2 °C. This kind of analysis is technically more challenging and requires much larger amounts of carbonate material than traditional oxygen-18 thermometry. Both techniques are thus complementary and equally useful for investigating past climates.</p>
+<p>Because all carbon and oxygen isotopes mentioned above are stable (as opposed, for instance, to <sup>14</sup>C), the clumped isotope excess is potentially preserved at geologic time scales (at least hunderds of millions of years). But for older samples, it is often quite challenging to obtain enough well-preserved material, because various natural processes are likely to modify the clumped isotope signal over long time scales.</p>
+<p>Suggested reading: <a href="https://doi.org/10.1016/j.quascirev.2011.09.001">Eiler (2011)</a>.</p>
+				<div class='footer'>
+					Last modified on 27 Sep 2023
+					<br>Powered by <a href="https://daeron.fr/staticwebsite">yet another static website engine</a>
+				</div>
+			</article>
+		</main>
+	
+	</body>
+	
+</html>
