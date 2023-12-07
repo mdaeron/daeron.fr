@@ -41,9 +41,9 @@
 			<article class=staticwebsite>
 				<h1>Yet another static website engine</h1>
 <p>Let's face it, nobody wants to hand-code HTML tags using a stone chisel like it's 1995. When you wish to publish a couple of simple web pages, it's very convenient to write them up using plain text such as this:</p>
-<div class="highlight"><pre><span></span><code>My secret recipe
+<pre class="highlight"><code class="language-txt">My secret recipe
 
-Based on Granny&#39;s blog (https://grannysblog.net)
+Based on Granny's blog (https://grannysblog.net)
 
 Ingredients
 
@@ -54,14 +54,13 @@ Ingredients
 Instructions
 
 1. Mix the ingredients
-2. Bake them for an hour
-</code></pre></div>
+2. Bake them for an hour</code></pre>
 <p>Some software (e.g., PHP) are able to perform “<strong>dynamic</strong>” serving of such text files, which means that every time someone uses their browser to load a certain URL, the server will read the corresponding file, convert it to HTML, and send the result back to the browser. This works well, and offers very powerful options such as reading some variables from the URL itself and adjusting the result accordingly (for example, by sending back the contents in another language, or by querying a database before returning the results). However setting up and debugging such systems can be challenging at first (though never underestimate your ability to learn), and they can be brittle (prone to failing in unexpected ways) and vulnerable to hacking. Also, unless you run your own server, you have to find a reliable hosting service, which may be free or not.</p>
 <p>Another, increasingly popular option is to convert your text files to HTML offline and upload the resulting files to a “<strong>static</strong>” web server, which will only serve these pages as they are and never attempt to be clever about it. The drawback is that you are limited to a finite number of “dumb” pages (as opposed to something entirely dynamic such as <a href="http://clumpycrunch.pythonanywhere.com">ClumpyCrunch</a>). But this means any bugs will show up offline, before you publish anything to the web, and the resulting bunch of files can be hosted nearly anywhere, generally for free. I'm using <a href="https://pages.github.com">Github Pages</a> for now, but moving to another provider would be fast and painless.</p>
 <p>There are many static website generators with bells and whistles. Popular ones currently include <a href="https://gohugo.io">Hugo</a>, <a href="https://jekyllrb.com">Jekyll</a>, and <a href="https://getpelican.com">Pelican</a>. They work well and require only a little bit of time to understand their internal logic (pages vs posts, tagging conventions, etc). Pretty much all of them understand <a href="https://www.markdownguide.org">Markdown</a>, a lightweight markup language designed to look like plain text but still allowing simple typographic formatting and linking to local or remote URLs. Converting our recipe to Markdown would require very few changes:</p>
-<div class="highlight"><pre><span></span><code># My secret recipe
+<pre class="highlight"><code class="language-txt"># My secret recipe
 
-Based on [Granny&#39;s blog](https://grannysblog.net)
+Based on [Granny's blog](https://grannysblog.net)
 
 ## Ingredients
 
@@ -72,8 +71,7 @@ Based on [Granny&#39;s blog](https://grannysblog.net)
 ## Instructions
 
 1. Mix the ingredients
-2. Bake them for an hour
-</code></pre></div>
+2. Bake them for an hour</code></pre>
 <p>I played with several static website generators over the years, but clearly my needs in that department are exceedingly basic and I always felt that they were doing something very simple with a little too much overhead. So I did the opiniated but throroughly unoriginal thing and wrote my own static website generator from scratch using Python. It's tiny because it does very few things:</p>
 <ol>
 <li>Read a bunch of Markdown files from a folder</li>
@@ -83,91 +81,81 @@ Based on [Granny&#39;s blog](https://grannysblog.net)
 <li>Copy each HTML file to another folder which I will eventually copy to the web server</li>
 </ol>
 <p>Here's the main code. First, import the libraries we will need:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">import</span> <span class="nn">markdown</span>
-<span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">http.server</span>
-<span class="kn">import</span> <span class="nn">socketserver</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">makedirs</span>
-<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">getmtime</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-py">from pathlib import Path
+import markdown
+import datetime
+import http.server
+import socketserver
+import shutil
+from os import makedirs
+from os.path import getmtime</code></pre>
 <p>Then define some settings. The local server will come in later so that we can check the final static website in a browser.</p>
-<div class="highlight"><pre><span></span><code><span class="n">PORT</span> <span class="o">=</span> <span class="mi">8080</span>            <span class="c1"># the port to be used by the local server</span>
-<span class="n">SRC</span>  <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>       <span class="c1"># the directory to read files from</span>
-<span class="n">DEST</span> <span class="o">=</span> <span class="s1">&#39;../daeron.fr&#39;</span>  <span class="c1"># the directory to save files to</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-py">PORT = 8080            # the port to be used by the local server
+SRC  = Path('.')       # the directory to read files from
+DEST = '../daeron.fr'  # the directory to save files to</code></pre>
 <p>This class will be used by the local server:</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Handler</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">SimpleHTTPRequestHandler</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">directory</span> <span class="o">=</span> <span class="n">DEST</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-py">class Handler(http.server.SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory = DEST, **kwargs)</code></pre>
 <p>Then create the Markdown parser with some extensions:</p>
-<div class="highlight"><pre><span></span><code><span class="n">md</span> <span class="o">=</span> <span class="n">markdown</span><span class="o">.</span><span class="n">Markdown</span><span class="p">(</span>
-    <span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s1">&#39;pymdownx.tilde&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;pymdownx.caret&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;pymdownx.superfences&#39;</span><span class="p">,</span>
-        <span class="p">])</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-py">md = markdown.Markdown(
+    extensions = [
+        'pymdownx.tilde',
+        'pymdownx.caret',
+        'pymdownx.superfences',
+        ])</code></pre>
 <p>Erase any previous website in the <code>DEST</code> directory:</p>
-<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">DEST</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">):</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-            <span class="n">p</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">p</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-py">for p in Path(DEST).glob('*'):
+    if not p.name.startswith('.'):
+        if p.is_file():
+            p.unlink()
+        elif p.is_dir():
+            shutil.rmtree(p)</code></pre>
 <p>Read the HTML template we will later use:</p>
-<div class="highlight"><pre><span></span><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;html/index.html&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fid</span><span class="p">:</span>
-    <span class="n">html</span> <span class="o">=</span> <span class="n">fid</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-py">with open('html/index.html') as fid:
+    html = fid.read()</code></pre>
 <p>For each Markdown file in the <code>md</code> directory, we read its content, convert it to HTML using the Markdown parser defined above, and insert the result into the HTML template, along with some info about when the Markdown file was last modified. We then create a website directory named after the Markdown file and save the resulting HTML file there:</p>
-<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">SRC</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;md/*.md&#39;</span><span class="p">):</span>
+<pre class="highlight"><code class="language-py">for p in SRC.glob('md/*.md'):
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">as</span> <span class="n">fid</span><span class="p">:</span>
-        <span class="n">content</span> <span class="o">=</span> <span class="n">fid</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    with open(p) as fid:
+        content = fid.read()
 
-    <span class="n">last_modif</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s1">&#39;Last modified on &#39;</span>
-        <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">getmtime</span><span class="p">(</span><span class="n">p</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1"> %b %Y&#39;</span><span class="p">)</span>
-        <span class="p">)</span>
+    last_modif = (
+        'Last modified on '
+        + datetime.datetime.fromtimestamp(getmtime(p)).strftime('%d %b %Y')
+        )
 
-    <span class="n">html_with_content</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;__page__&#39;</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">stem</span><span class="p">)</span>
-    <span class="n">html_with_content</span> <span class="o">=</span> <span class="n">html_with_content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;__last_modif__&#39;</span><span class="p">,</span> <span class="n">last_modif</span><span class="p">)</span>
-    <span class="n">html_with_content</span> <span class="o">=</span> <span class="n">html_with_content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;__markdown_page__&#39;</span><span class="p">,</span> <span class="n">md</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">content</span><span class="p">))</span>
+    html_with_content = html.replace('__page__', p.stem)
+    html_with_content = html_with_content.replace('__last_modif__', last_modif)
+    html_with_content = html_with_content.replace('__markdown_page__', md.convert(content))
 
-    <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">stem</span> <span class="o">==</span> <span class="s1">&#39;index&#39;</span><span class="p">:</span>
-        <span class="n">outfile</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">DEST</span><span class="si">}</span><span class="s1">/index.html&#39;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">outfile</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">DEST</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="s1">/index.html&#39;</span><span class="p">)</span>
-        <span class="n">makedirs</span><span class="p">(</span><span class="n">outfile</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">exist_ok</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+    if p.stem == 'index':
+        outfile = Path(f'{DEST}/index.html')
+    else:
+        outfile = Path(f'{DEST}/{p.stem}/index.html')
+        makedirs(outfile.parent, exist_ok = True)
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fid</span><span class="p">:</span>
-        <span class="n">fid</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">html_with_content</span><span class="p">)</span>
-</code></pre></div>
+    with open(outfile, 'w') as fid:
+        fid.write(html_with_content)</code></pre>
 <p>We also copy a bunch of binary files (article PDFs) from the <code>static</code> directory to the website, along with a CSS file used to define the appearance of our final pages:</p>
-<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">SRC</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;static/**/*&#39;</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
-        <span class="k">continue</span>
-    <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-        <span class="n">newfile</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">DEST</span><span class="si">}</span><span class="s1">/&#39;</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
-        <span class="n">makedirs</span><span class="p">(</span><span class="n">newfile</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">exist_ok</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
-        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">newfile</span><span class="p">)</span>     
-</code></pre></div>
+<pre class="highlight"><code class="language-py">for p in SRC.glob('static/**/*'):
+    if p.name.startswith('.'):
+        continue
+    if p.is_file():
+        newfile = Path(f'{DEST}/' + '/'.join(p.parts[1:]))
+        makedirs(newfile.parent, exist_ok = True)
+        shutil.copy(p, newfile)     </code></pre>
 <p>We add two files needed by Github Pages:</p>
-<div class="highlight"><pre><span></span><code><span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">DEST</span><span class="si">}</span><span class="s1">/.nojekyll&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">touch</span><span class="p">()</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">DEST</span><span class="si">}</span><span class="s1">/CNAME&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fid</span><span class="p">:</span>
-    <span class="n">fid</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;daeron.fr&#39;</span><span class="p">)</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-py">Path(f'{DEST}/.nojekyll').touch()
+with open(f'{DEST}/CNAME', 'w') as fid:
+    fid.write('daeron.fr')</code></pre>
 <p>Finally, we start a local web server so that we can check out the result before uploading it to the actual remote server (this is done independently, not by the code shown here):</p>
-<div class="highlight"><pre><span></span><code><span class="k">with</span> <span class="n">socketserver</span><span class="o">.</span><span class="n">TCPServer</span><span class="p">((</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">PORT</span><span class="p">),</span> <span class="n">Handler</span><span class="p">)</span> <span class="k">as</span> <span class="n">httpd</span><span class="p">:</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Serving at http://127.0.0.1:</span><span class="si">{</span><span class="n">PORT</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="n">httpd</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
-    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
-        <span class="k">pass</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-py">with socketserver.TCPServer(('', PORT), Handler) as httpd:
+    try:
+        print(f'Serving at http://127.0.0.1:{PORT}')
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        pass</code></pre>
 <p>The whole thing is fewer than a hundred lines of code and this is what this website runs on. Although the actual content of the website is likely to change over time, that will only require editing a few Markdown files, and I expect that the site generator will pretty much remain as is. The complete source code is available <a href="https://github.com/mdaeron/src.daeron.fr">here</a>.</p>
 				<div class='footer'>
 					Last modified on 13 Feb 2023
