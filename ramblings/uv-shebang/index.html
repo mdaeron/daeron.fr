@@ -53,27 +53,28 @@
 <li><code>uv</code> is extremely fast, so that python itself and all required dependencies can be reinstalled from scratch without any noticeable overhead.</li>
 </ul>
 <p>To use <code>uv</code>, you first have to <a href="https://docs.astral.sh/uv/getting-started/installation">install it</a>, then modify your shebang accordingly. There is absolutely no need to install Python for this to work.</p>
-<div class="highlight"><pre><span></span><code><span class="ch">#! /usr/bin/env uv run python</span>
+<div class="highlight"><pre><span></span><code><span class="ch">#! /usr/bin/env uv --no-project run python</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Nobody expects the Spanish Inquisition!&quot;</span><span class="p">)</span>
 </code></pre></div>
+<p>In the above code, <code>--no-project</code> means that if you were to invoke the script in a directory where another set of requirements normally applies (e.g., as a result of a <a href="https://docs.astral.sh/uv/guides/projects/#pyprojecttoml"><code>pyproject.toml</code></a> file), these additional requirements would be ignored while running your script.</p>
 <p>The true power of <code>uv</code> shebangs lies in the ability to specify dependencies within the shebang line. For example, if your script needs <code>numpy</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="ch">#! /usr/bin/env uv run --with numpy python</span>
+<div class="highlight"><pre><span></span><code><span class="ch">#! /usr/bin/env uv run --no-project --with numpy python</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">eye</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">eye</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
 </code></pre></div>
 <p>One may require a specific version of <code>numpy</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="ch">#! /usr/bin/env uv run --with numpy==2.1.2 python</span>
+<div class="highlight"><pre><span></span><code><span class="ch">#! /usr/bin/env uv run --no-project --with numpy==2.1.2 python</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
 </code></pre></div>
 <p>One may also require more than one dependency:</p>
-<div class="highlight"><pre><span></span><code><span class="ch">#! /usr/bin/env uv run --with matplotlib==3.9.2 --with scipy==1.14.1 python</span>
+<div class="highlight"><pre><span></span><code><span class="ch">#! /usr/bin/env uv run --no-project --with matplotlib==3.9.2 --with scipy==1.14.1 python</span>
 </code></pre></div>
 <p>Finally, one may require a specific version of Python:</p>
-<div class="highlight"><pre><span></span><code><span class="ch">#! /usr/bin/env uv run --with matplotlib --with scipy --python 3.11.6 python</span>
+<div class="highlight"><pre><span></span><code><span class="ch">#! /usr/bin/env uv run --no-project --with matplotlib --with scipy --python 3.11.6 python</span>
 </code></pre></div>
 <p>As a fully functional example, here is a version of the <code>doi2bibtex</code> script described <a href="/ramblings/doi2bibtex">here</a> which only requires <code>uv</code> to work properly:</p>
-<div class="highlight"><pre><span></span><code><span class="ch">#! /usr/bin/env uv run --with requests==2.32.3 --with pyperclip==1.9.0 python</span>
+<div class="highlight"><pre><span></span><code><span class="ch">#! /usr/bin/env uv run --no-project --with requests==2.32.3 --with pyperclip==1.9.0 python</span>
 
 <span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">requests</span><span class="o">,</span> <span class="nn">pyperclip</span>
 
