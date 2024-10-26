@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="/style.css">
+		<link rel="stylesheet" href="/sas.css">
+		<title>Unleash the power of uv shebangs</title>
+	</head>
+
+	<body>
+
+		<!-- Navigation bar -->
+		<header class="header">
+			<!-- Logo -->
+			<a href=/ class="logo">daeron.fr</a>
+
+			<!-- Hamburger icon -->
+			<input class="side-menu" type="checkbox" id="side-menu"/>
+			<label class="hamb" for="side-menu"><span class="hamb-line"></span></label>
+
+			<!-- Menu -->
+			<nav class="nav">
+				<ul class="menu">
+					<li><a href="/about">About</a></li>
+					<li><a href="/biblio">Publications</a></li>
+					<li><a href="/ramblings">Ramblings</a></li>
+					<li><a href="/links">Links</a></li>
+					<li><a href="https://github.com/mdaeron/D47crunch">D47crunch</a></li>
+					<li><a href="https://github.com/mdaeron/D47calib">D47calib</a></li>
+					<li><a href="http://clumpycrunch.pythonanywhere.com">ClumpyCrunch</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<!-- Main content -->
+		<main>
+			<article class=uv-shebang>
+				<h1>Unleash the power of uv shebangs</h1>
+<p>A <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a> is the character sequence <code>#!</code> used at the start of a text file in <a href="https://en.wikipedia.org/wiki/POSIX">POSIX</a> systems to specify which piece of software should be used to execute the contents of the file, for example:</p>
+<div class="highlight"><pre><span></span><code><span class="ch">#! python</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Nobody expects the Spanish Inquisition!&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>In theory, <code>#! python</code> is sufficient. In practice, to ensure that your operating system can find the <code>python</code> executable, one often uses <code>#! /usr/bin/env python</code> instead. The executable <a href="https://en.wikipedia.org/wiki/Env"><code>env</code></a> is used to locate <code>python</code>, wherever it might reside on your computer.</p>
+<p>But this means that to use the above script, you need to have Python installed. Python is notorious for its <a href="https://xkcd.com/1987">dependency hell</a>, meaning that it is very easy to find yourself in a situation where several independent Python distributions coexit within the same operating system (so that your shebang might be calling the wrong Python version), or where updating the Python library needed by one script (“dependency”) will break another script.</p>
+<p>All this messiness can be avoided by using <a href="https://docs.astral.sh/uv"><code>uv</code></a>, a Python dependency manager with the following selling points:</p>
+<ul>
+<li><code>uv</code> is a self-contained executable which is very unlikely to break down even if you do something wrong.</li>
+<li><code>uv</code> uses independent “virtual environments”, sandboxing each script so that changing the dependencies for one script will not break another</li>
+<li><code>uv</code> is extremely fast, so that python itself and all required dependencies can be reinstalled from scratch without any noticeable overhead.</li>
+</ul>
+<p>To use <code>uv</code>, you first have to <a href="https://docs.astral.sh/uv/getting-started/installation">install it</a>, then modify your shebang accordingly. There is absolutely no need to install Python for this to work.</p>
+<div class="highlight"><pre><span></span><code><span class="ch">#! /usr/bin/env uv run python</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Nobody expects the Spanish Inquisition!&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>The true power of <code>uv</code> shebangs lies in the ability to specify dependencies within the shebang line. For example, if your script needs <code>numpy</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="ch">#! /usr/bin/env uv run --with numpy python</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">eye</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">eye</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+</code></pre></div>
+<p>One may require a specific version of <code>numpy</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="ch">#! /usr/bin/env uv run --with numpy==2.1.2 python</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+</code></pre></div>
+<p>One may also require more than one dependency:</p>
+<div class="highlight"><pre><span></span><code><span class="ch">#! /usr/bin/env uv run --with matplotlib==3.9.2 --with scipy==1.14.1 python</span>
+</code></pre></div>
+<p>Finally, one may require a specific version of Python:</p>
+<div class="highlight"><pre><span></span><code><span class="ch">#! /usr/bin/env uv run --with matplotlib --with scipy --python 3.11.6 python</span>
+</code></pre></div>
+<p>As a fully functional example, here is a version of the <code>doi2bibtex</code> script described <a href="/ramblings/doi2bibtex">here</a> which only requires <code>uv</code> to work properly:</p>
+<div class="highlight"><pre><span></span><code><span class="ch">#! /usr/bin/env uv run --with requests==2.32.3 --with pyperclip==1.9.0 python</span>
+
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">requests</span><span class="o">,</span> <span class="nn">pyperclip</span>
+
+<span class="n">doi</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>              <span class="c1"># DOI is the first command-line argument</span>
+<span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;http://doi.org/</span><span class="si">{</span><span class="n">doi</span><span class="si">}</span><span class="s1">&#39;</span>  <span class="c1"># construct the URL</span>
+
+<span class="c1"># HTTP header to get BibTeX format back</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;text/bibliography; style=bibtex&#39;</span><span class="p">}</span>
+
+<span class="c1"># send out the HTTP request</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span><span class="p">)</span>
+
+<span class="n">r</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>  <span class="c1"># specify that the response is UTF8-encoded</span>
+<span class="n">bib</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>    <span class="c1"># shave of the first and last characters of the response</span>
+<span class="n">pyperclip</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">bib</span><span class="p">)</span>   <span class="c1"># copy the result to the clipboard</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bib</span><span class="p">)</span>            <span class="c1"># and print it out as an indicator of success</span>
+</code></pre></div>
+				<div class='footer'>
+					Last modified on 26 Oct 2024
+					<br>Powered by <a href="https://daeron.fr/staticwebsite">yet another static website engine</a>
+				</div>
+			</article>
+		</main>
+	
+	</body>
+	
+</html>
