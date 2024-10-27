@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="/style.css">
+		<link rel="stylesheet" href="/sas.css">
+		<title>Modern LaTeX is not as bad as you think</title>
+	</head>
+
+	<body>
+
+		<!-- Navigation bar -->
+		<header class="header">
+			<!-- Logo -->
+			<a href=/ class="logo">daeron.fr</a>
+
+			<!-- Hamburger icon -->
+			<input class="side-menu" type="checkbox" id="side-menu"/>
+			<label class="hamb" for="side-menu"><span class="hamb-line"></span></label>
+
+			<!-- Menu -->
+			<nav class="nav">
+				<ul class="menu">
+					<li><a href="/about">About</a></li>
+					<li><a href="/biblio">Publications</a></li>
+					<li><a href="/ramblings">Ramblings</a></li>
+					<li><a href="/links">Links</a></li>
+					<li><a href="https://github.com/mdaeron/D47crunch">D47crunch</a></li>
+					<li><a href="https://github.com/mdaeron/D47calib">D47calib</a></li>
+					<li><a href="http://clumpycrunch.pythonanywhere.com">ClumpyCrunch</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<!-- Main content -->
+		<main>
+			<article class=modern-latex>
+				<h1>Modern LaTeX is not as bad as you think</h1>
+<p>This post is for you if your advisor/coworker/inner masochist is insisting that you should really try using LaTeX. My goal here is not to convert you to the Church of <a href="https://en.wikipedia.org/wiki/Donald_Knuth">Knuth</a>, but to make it as painless as possible to evaluate what modern LaTeX has to offer, avoiding antiquated nonsense such as DVI files and backslash-escaped umlauts.</p>
+<p>The sad truth is that all word-processing software sucks to some extent. <a href="https://en.wikipedia.org/wiki/WYSIWYG">WYSIWYG</a> appears nice and simple but you pay the price as soon as you require moderate amounts of referencing (equations, figures, tables, sections, page numbers, bibliographic citations...) and/or automation (macros, getting arbitrary content from other software). Markup languages such as LaTeX clearly separate content from format, but LaTeX itself is pretty long in the tooth (over 40 years now), does not follow modern software conventions, and rests on a rickety pile of packages upon packages.</p>
+<p>To make matters worse, many LaTeX tutorials fail to take into account crucial modern improvements, such as the ability to directly generate pdf files, type text using unicode encoding (<code>ambiguïté</code> instead of <code>ambigu\"it\'e</code>), use any font installed on your system, and insert pictures in modern vector and/or raster formats (pdf, jpg, png).</p>
+<p>Here is a simple set of instructions to get you started writing mostly painless LaTeX, along with a minimal template that offers the following basic features:</p>
+<ul>
+<li>use any font installed on your system</li>
+<li>type regular unicode text, including with accents or using other scripts than the Latin alphabet</li>
+<li>insert external pdf plots into figures</li>
+<li>automatically number and refer to specific pages, sections, figures, equations</li>
+<li>insert bibliographic citations and automatically collect the corresponding references at the end of your document</li>
+</ul>
+<p><a href="/ramblings/modern-latex/minxelatex.zip">Here</a> is a zip file with the full template, along with the fonts used in this template (<code>STIX2</code> directory) which you will have to install on your system. To compile this source file, I recommend installing the <a href="https://www.tug.org/texlive">TeX Live</a> distribution. If you are on macOS, aim for the <a href="https://www.tug.org/mactex">MacTeX</a> distribution, which includes Mac-specific software.</p>
+<p>Compiling the <code>minxelatex.tex</code> source file is done with XeLaTeX, a modern reimplementation of LaTeX. On the command line, this is simply a matter of issuing <code>xelatex minimal-xelatex.tex</code>, but on a Mac I recommend opening the source file in TeXShop (bundled with MacTeX). The first two lines of the source file are special comments that let TeXShop know to compile using XeLaTeX.</p>
+<p>Preparing all of the bibliographic references is done in a second step, using another program named <code>biber</code> (also included in TeX Live). This can be done by issuing <code>biber minimal-xelatex</code>, or by specifying <code>biber</code> in TeXShop's preferences (Preferences -&gt; Engine -&gt; BibTeX Engine). After running biber successfully, run XeLaTeX once again to update the document accordingly:</p>
+<p align="center">
+<img align="center" src="/ramblings/modern-latex/minxelatex.jpg" style="border:1px solid #dddddd; width:80%;">
+</p>
+
+<p>Hopefully, these instructions should allow anyone to start writing actual sentences in a document within minutes of downloading everything. You will most certainly want to adjust some settings, and will have to dive in to do so. At that point, <a href="https://tex.stackexchange.com">TeX Stack Exchange</a> is your best friend, but at least you'll be starting from a reasonably good place.</p>
+				<div class='footer'>
+					Last modified on 27 Oct 2024
+					<br>Powered by <a href="https://daeron.fr/staticwebsite">yet another static website engine</a>
+				</div>
+			</article>
+		</main>
+	
+	</body>
+	
+</html>
