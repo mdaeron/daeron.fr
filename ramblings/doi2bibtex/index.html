@@ -8,8 +8,15 @@
 		<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 		<link rel="stylesheet" href="/style.css">
 		<link rel="stylesheet" href="/sas.css">
+		<!--
+		<script type="module">
+			import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+			mermaid.initialize({ startOnLoad: true });
+		</script>
+		-->
 		<title>Get BibTeX from a DOI</title>
 	</head>
+
 
 	<body>
 
@@ -42,40 +49,37 @@
 				<h1>Get BibTeX from a DOI</h1>
 <p>You probably know that <a href="https://doi.org">doi.org</a> will redirect any DOI you throw at it to the current URL of the corresponding document. For example: <a href="https://doi.org/10.1016/j.chemgeo.2024.122148">https://doi.org/10.1016/j.chemgeo.2024.122148</a> will send you to Elsevier.</p>
 <p>But you can use something called <a href="https://en.wikipedia.org/wiki/List_of_HTTP_header_fields">HTTP headers</a> to specify that, instead of a simple redirect, you want to get back the bibliographic information for that reference in BibTeX format. A simple way to do so is to use a command-line utility such as <code>curl</code>:</p>
-<div class="highlight"><pre><span></span><code>curl -LH &quot;Accept: text/bibliography; style=bibtex&quot; https://doi.org/10.1016/j.chemgeo.2024.122148
-</code></pre></div>
+<pre class="highlight"><code>curl -LH "Accept: text/bibliography; style=bibtex" https://doi.org/10.1016/j.chemgeo.2024.122148</code></pre>
 <p>Which will yield something like:</p>
-<div class="highlight"><pre><span></span><code> @article{Pesnin_2024, title={Mineralogical and environmental effects on the δ13C, δ18O, and clumped isotope composition of modern bryozoans}, volume={662}, ISSN={0009-2541}, url={http://dx.doi.org/10.1016/j.chemgeo.2024.122148}, DOI={10.1016/j.chemgeo.2024.122148}, journal={Chemical Geology}, publisher={Elsevier BV}, author={Pesnin, Marie and Thaler, Caroline and Daëron, Mathieu and Nomade, Sébastien and Rollion-Bard, Claire}, year={2024}, month=sep, pages={122148} }
-</code></pre></div>
+<pre class="highlight"><code> @article{Pesnin_2024, title={Mineralogical and environmental effects on the δ13C, δ18O, and clumped isotope composition of modern bryozoans}, volume={662}, ISSN={0009-2541}, url={http://dx.doi.org/10.1016/j.chemgeo.2024.122148}, DOI={10.1016/j.chemgeo.2024.122148}, journal={Chemical Geology}, publisher={Elsevier BV}, author={Pesnin, Marie and Thaler, Caroline and Daëron, Mathieu and Nomade, Sébastien and Rollion-Bard, Claire}, year={2024}, month=sep, pages={122148} }</code></pre>
 <h3>Streamlining the process</h3>
 <p>Let's make our lives easier by automating the process further, so that (a) there is no need to add the header format and prefix the DOI with <code>https://doi.org/</code>, and (b) sending the output directly to the clipboard. Unsuprisingly, this is easy to achieve with Python:</p>
-<div class="highlight"><pre><span></span><code><span class="ch">#! /usr/bin/env python</span>
+<pre class="highlight"><code class="language-py">#! /usr/bin/env python
 
-<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">requests</span><span class="o">,</span> <span class="nn">pyperclip</span>
+import sys, requests, pyperclip
 
-<span class="n">doi</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>              <span class="c1"># DOI is the first command-line argument</span>
-<span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;http://doi.org/</span><span class="si">{</span><span class="n">doi</span><span class="si">}</span><span class="s1">&#39;</span>  <span class="c1"># construct the URL</span>
+doi = sys.argv[1]              # DOI is the first command-line argument
+url = f'http://doi.org/{doi}'  # construct the URL
 
-<span class="c1"># HTTP header to get BibTeX format back</span>
-<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;text/bibliography; style=bibtex&#39;</span><span class="p">}</span>
+# HTTP header to get BibTeX format back
+headers = {'Accept': 'text/bibliography; style=bibtex'}
 
-<span class="c1"># send out the HTTP request</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span><span class="p">)</span>
+# send out the HTTP request
+r = requests.get(url, headers = headers)
 
-<span class="n">r</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>  <span class="c1"># specify that the response is UTF8-encoded</span>
-<span class="n">bib</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>    <span class="c1"># shave of the first and last characters of the response</span>
-<span class="n">pyperclip</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">bib</span><span class="p">)</span>   <span class="c1"># copy the result to the clipboard</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">bib</span><span class="p">)</span>            <span class="c1"># and print it out as an indicator of success</span>
-</code></pre></div>
+r.encoding = 'utf-8'  # specify that the response is UTF8-encoded
+bib = r.text[1:-1]    # shave of the first and last characters of the response
+pyperclip.copy(bib)   # copy the result to the clipboard
+print(bib)            # and print it out as an indicator of success</code></pre>
 <p>Save the above as <code>doi2bibtex</code>, make it executable (this should require something like <code>chmod +x doi2bibtex</code> assuming you are on a <a href="https://en.wikipedia.org/wiki/POSIX">POSIX</a> system), move it to somewhere on your <a href="https://en.wikipedia.org/wiki/PATH_(variable)">path</a>, and voilà, now you can simply type <code>doi2bibtex</code> followed by any valid DOI, wait to the response to print out, and immediately copy the results into your favorite bibliographic piece of software.</p>
 <p>For now, the Python code above requires a functional Python installation, along with the <code>requests</code> and <code>pyperclip</code> dependencies, which is <a href="https://xkcd.com/1987">no fun at all</a>. See <a href="/ramblings/uv-shebang">here</a> for a painless solution to this problem.</p>
 				<div class='footer'>
-					Last modified on 20 Feb 2025
+					Last modified on 31 May 2026
 					<br>Powered by <a href="https://daeron.fr/ramblings/static-website">yet another static website engine</a>
 				</div>
 			</article>
 		</main>
-	
+
 	</body>
-	
+
 </html>
